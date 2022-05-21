@@ -9,37 +9,43 @@
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted, reactive} from 'vue';
-import {useCookies} from "vue3-cookies";
+import {defineComponent, inject, reactive} from 'vue';
 import {ElMessage} from "element-plus";
-import router from "@/router";
-import axios from "axios";
-import {BASE_URL} from "@/store";
 import { useStore } from 'vuex'
+import {useRouter} from "vue-router";
+import {IJWTNetworkDriver} from "@/domain/drivers/IJWTNetworkDriver";
+import {IAccountRepository} from "@/domain/repositories/abstracts/AccountRepository.types";
+import {useCookies} from "vue3-cookies";
 
 export default defineComponent({
   setup() {
-    const { cookies } = useCookies();
-    const store = useStore()
+    const router = useRouter();
+    const networkDriver = inject('networkDriver') as IJWTNetworkDriver;
+    const accountRepository = inject('accountRepository') as IAccountRepository;
 
-    let user = reactive({
+    const user = reactive({
       user_name: '',
       user_password: '',
-    })
-    const submit_form = () => {
-      if (user.user_name && user.user_password) {
-        store.dispatch('loginUser', user)
-      } else {
-        ElMessage({
-          showClose: true,
-          message: 'Заполните обязательные поля.',
-          type: 'error',
-        })
-      }
+    });
+
+    const submit_form = async() => {
+        try {
+          const tokens = await accountRepository.login(user.user_name, user.user_password)
+          networkDriver.signIn(tokens.access, tokens.refresh)
+          router.replace({
+            name: 'homepage'
+          }).then()
+        } catch (e) {
+          console.log(e)
+        }
     }
+
+
     return {
       user,
-      submit_form
+      submit_form,
+      networkDriver,
+      accountRepository,
     }
   },
 });

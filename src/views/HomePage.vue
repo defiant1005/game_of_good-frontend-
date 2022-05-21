@@ -1,29 +1,36 @@
 <template>
   <div class="homePage__wrapper">
-    <div style="display:flex; flex-direction: column; margin-bottom: 20px" v-for="post in get_questions" :key="post.id">
-      <div style="border: 1px solid gray">{{post.title}}</div>
+    <div>
+      <button @click="logout">Выйти</button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, onMounted} from 'vue';
-import {mapActions, mapGetters} from "vuex";
+import {defineComponent, inject} from 'vue';
+import {IJWTNetworkDriver} from "@/domain/drivers/IJWTNetworkDriver";
+import {useRouter} from "vue-router";
 
 export default defineComponent({
-  methods: {
-    ...mapActions({
-      GET_FEEDBACKS_FROM_API:'GET_FEEDBACKS_FROM_API',
-    })
+  setup() {
+    const networkDriver = inject('networkDriver') as IJWTNetworkDriver;
+    const router = useRouter();
+
+    const logout = async() => {
+      try {
+        networkDriver.signOut()
+        router.replace({
+          name: 'login'
+        }).then()
+      } catch (e) {
+        console.log(e)
+      }
+    }
+
+    return {
+      logout
+    }
   },
-  computed: {
-    ...mapGetters({
-      get_questions: 'get_questions',
-    })
-  },
-  mounted() {
-    this.GET_FEEDBACKS_FROM_API()
-  }
 });
 </script>
 <style lang="scss">

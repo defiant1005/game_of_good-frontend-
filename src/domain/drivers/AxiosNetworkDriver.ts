@@ -22,7 +22,7 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
 
         this._axios_instance = axios.create({
             baseURL: baseUrl,
-            // timeout: 1000,
+            timeout: 1000,
         })
         if (refreshToken !== null && typeof refreshToken !== 'undefined') {
             this.status = LoginStatus.IN_PROCCESS

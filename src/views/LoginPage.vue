@@ -10,12 +10,10 @@
 
 <script lang="ts">
 import {defineComponent, inject, reactive} from 'vue';
-import {ElMessage} from "element-plus";
-import { useStore } from 'vuex'
 import {useRouter} from "vue-router";
 import {IJWTNetworkDriver} from "@/domain/drivers/IJWTNetworkDriver";
 import {IAccountRepository} from "@/domain/repositories/abstracts/AccountRepository.types";
-import {useCookies} from "vue3-cookies";
+import {ElMessage} from "element-plus";
 
 export default defineComponent({
   setup() {
@@ -36,7 +34,20 @@ export default defineComponent({
             name: 'homepage'
           }).then()
         } catch (e) {
-          console.log(e)
+          if (e.response.status === 401) {
+            ElMessage({
+              showClose: true,
+              message: 'Неверный логин или пароль',
+              type: 'error',
+            })
+          } else {
+            ElMessage({
+              showClose: true,
+              message: 'Неизвестная ошибка. Обратитесь к администратору.',
+              type: 'error',
+            })
+            console.log(e)
+          }
         }
     }
 

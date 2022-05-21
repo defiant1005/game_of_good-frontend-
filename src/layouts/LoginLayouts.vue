@@ -1,16 +1,14 @@
 <template>
   <div class="loginLayouts__wrapper">
-    <MainLoginLayouts></MainLoginLayouts>
+    <router-view></router-view>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import MainLoginLayouts from "@/layouts/MainLayouts.vue";
 
 export default defineComponent ({
   components: {
-    MainLoginLayouts,
   }
 })
 </script>

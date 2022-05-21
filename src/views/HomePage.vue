@@ -1,34 +1,29 @@
 <template>
   <div class="homePage__wrapper">
-    <div>
-      <button @click="logout">Выйти</button>
-    </div>
+    <button @click="get_all_questions">Получить все вопросы</button>
   </div>
 </template>
 
 <script lang="ts">
 import {defineComponent, inject} from 'vue';
-import {IJWTNetworkDriver} from "@/domain/drivers/IJWTNetworkDriver";
-import {useRouter} from "vue-router";
+import {IAccountRepository} from "@/domain/repositories/abstracts/AccountRepository.types";
 
 export default defineComponent({
   setup() {
-    const networkDriver = inject('networkDriver') as IJWTNetworkDriver;
-    const router = useRouter();
+    const accountRepository = inject('accountRepository') as IAccountRepository;
 
-    const logout = async() => {
+    const get_all_questions = async() => {
       try {
-        networkDriver.signOut()
-        router.replace({
-          name: 'login'
-        }).then()
+        const response = await accountRepository.get_questions()
+        const questions = response.data
+        console.log(questions)
       } catch (e) {
         console.log(e)
       }
     }
 
     return {
-      logout
+      get_all_questions
     }
   },
 });

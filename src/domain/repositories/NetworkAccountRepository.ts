@@ -28,4 +28,11 @@ export class NetworkAccountRepository implements IAccountRepository {
             return Promise.reject(Error(`Ошибка входа. response[status]: ${response.status_code};response[data]: ${JSON.stringify(response.data)}\``));
         }
     }
+
+    async get_questions() {
+        const url = '/questions/'
+        const response = await this._networkDriver.get(url)
+        return response
+    }
+
 }

@@ -4,7 +4,9 @@ import {IResponse} from "./IResponse";
 import {cAxiosResponse} from "./AxiosResponse";
 import {IJWTNetworkDriver, LoginStatus} from "@/domain/drivers/IJWTNetworkDriver";
 import {useCookies} from "vue3-cookies";
-import {ElNotification} from "element-plus";
+import {ElMessage, ElNotification} from "element-plus";
+import router from "@/router";
+import {useRouter} from "vue-router";
 
 const {cookies} = useCookies();
 
@@ -101,6 +103,30 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
         cookies.set('accessToken', accessToken)
         this._registerJWTRequestInterceptor();
         this._registerJWTResponseInterceptor();
+    }
+    async register(register_data:any) {
+        const router = useRouter();
+
+        const data = {
+            username: register_data.username,
+            password: register_data.password,
+            // email: register_data.email,
+        }
+        try {
+            const response:any = await this._axios_instance.post('auth/users/', data)
+            return response
+        } catch (e) {
+            return e
+            // console.log(e)
+            // const errors:any = Object.values(e.response.data)[0]
+            // errors.forEach((i:any) => {
+            //     ElMessage({
+            //         showClose: true,
+            //         message: `${i}`,
+            //         type: 'error',
+            //     })
+            // })
+        }
     }
     signOut(): void {
         this._accessToken = undefined;

@@ -1,17 +1,25 @@
 <template>
-  123
-<!--  <router-view></router-view>-->
+  <div class="login__wrapper">
+    <form class="login__form-container">
+      <input placeholder="Логин" v-model="user.user_name" class="login__form-input"/>
+      <input type="password" placeholder="Пароль" v-model="user.user_password" class="login__form-input"/>
+      <button @click.prevent="submit_form" class="login__form-submit">Войти</button>
+    </form>
+  </div>
 </template>
 
 <script lang="ts">
-import {defineComponent, inject, reactive} from 'vue';
+import {defineComponent, inject, onMounted, reactive} from 'vue';
 import {useRouter} from "vue-router";
 import {IJWTNetworkDriver} from "@/domain/drivers/IJWTNetworkDriver";
 import {IAccountRepository} from "@/domain/repositories/abstracts/AccountRepository.types";
 import {ElMessage} from "element-plus";
+import {useCookies} from "vue3-cookies";
 
 export default defineComponent({
   setup() {
+    const { cookies } = useCookies();
+
     const router = useRouter();
     const networkDriver = inject('networkDriver') as IJWTNetworkDriver;
     const accountRepository = inject('accountRepository') as IAccountRepository;
@@ -21,15 +29,23 @@ export default defineComponent({
       user_password: '',
     });
 
+    onMounted(() => {
+      let username = cookies.get('user_name')
+      if (typeof username !== 'undefined') {
+        user.user_name = username
+      }
+    })
     const submit_form = async() => {
+      if (user.user_name && user.user_password) {
         try {
           const tokens = await accountRepository.login(user.user_name, user.user_password)
           networkDriver.signIn(tokens.access, tokens.refresh)
+          cookies.set('user_name', user.user_name)
           router.replace({
-            name: 'homepage'
+            name: 'main'
           }).then()
         } catch (e) {
-          if (e.response.status === 401) {
+          if (typeof e.response.status !=='undefined' && e.response.status === 401) {
             ElMessage({
               showClose: true,
               message: 'Неверный логин или пароль',
@@ -44,6 +60,13 @@ export default defineComponent({
             console.log(e)
           }
         }
+      } else {
+        ElMessage({
+          showClose: true,
+          message: 'Введите логин и пароль',
+          type: 'error',
+        })
+      }
     }
 
 
@@ -61,6 +84,6 @@ export default defineComponent({
 
 
 <style lang="scss">
-@import "@/assets/styles/login_page/login_page";
+@import "@/assets/styles/login_page/login_page.scss";
 
 </style>

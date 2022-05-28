@@ -6,3 +6,55 @@
   justify-content: center;
   align-items: center;
 }
+.loginLayouts__container {
+  width: 320px;
+  height: 328px;
+  background: #222222;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.loginLayouts__btn {
+  width: 240px;
+  height: 36px;
+  font-size: 14px;
+  background: #ffffff;
+  color: #222222;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.signIn__btn {
+  background: #ffffff;
+  color: #222222;
+}
+.signIn__btn:hover {
+  background: #d5d5d5;
+}
+.signIn__btn:active {
+  background: rgba(180, 180, 180, 0.9);
+}
+.signOut__btn {
+  margin-top: 15px;
+  background: #4bb34b;
+  color: white;
+}
+.signOut__btn:hover {
+  background: #43a843;
+}
+.signOut__btn:active {
+  background: #1b7a1b;
+}
+.loginLayouts__title {
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-size: 20px;
+  line-height: 24px;
+  font-weight: 400;
+  color: white;
+}

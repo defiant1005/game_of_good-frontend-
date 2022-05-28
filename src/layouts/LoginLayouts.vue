@@ -1,7 +1,5 @@
 <template>
-  <div class="loginLayouts__wrapper">
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script lang="ts">

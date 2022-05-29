@@ -55,15 +55,15 @@ const router = createRouter({
 })
 
 
-// router.beforeEach((to, from, next) => {
-//   const accessToken = cookies.get("accessToken");
-//   if (accessToken === null && to.path !== '/login') {
-//     next("login");
-//   } else if (accessToken && to.path === '/login' ) {
-//     next("homepage");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const accessToken = cookies.get("accessToken");
+  if (accessToken === null && to.path !=='' && to.path !=='/' &&  to.path !=='/login' &&  to.path !=='/register') {
+    next("");
+  } else if (accessToken && to.path !=='/main') {
+    next("main");
+  } else {
+    next();
+  }
+});
 
 export default router

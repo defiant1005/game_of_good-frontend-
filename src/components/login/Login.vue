@@ -1,8 +1,8 @@
 <template>
   <div class="login__wrapper">
     <form class="login__form-container">
-      <input placeholder="Логин" v-model="user.user_name" class="login__form-input"/>
-      <input type="password" placeholder="Пароль" v-model="user.user_password" class="login__form-input"/>
+      <el-input v-model="user.user_name" type="text" placeholder="Логин"/>
+      <el-input v-model="user.user_password" type="password" autocomplete="off" show-password placeholder="Пароль"/>
       <button @click.prevent="submit_form" class="login__form-submit">Войти</button>
     </form>
   </div>

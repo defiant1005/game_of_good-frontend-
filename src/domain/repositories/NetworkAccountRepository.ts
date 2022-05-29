@@ -34,5 +34,15 @@ export class NetworkAccountRepository implements IAccountRepository {
         const response = await this._networkDriver.get(url)
         return response
     }
+    async get_categories() {
+        const url = '/categories/'
+        const response = await this._networkDriver.get(url)
+        return response
+    }
+    async get_users() {
+        const url = '/users/'
+        const response = await this._networkDriver.get(url)
+        return response
+    }
 
 }

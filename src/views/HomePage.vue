@@ -1,5 +1,6 @@
 <template>
   <div class="homePage__wrapper">
+    <div class="test__class">Пока что все выводится в консоль</div>
     <button @click="get_all_questions" class="get__all-questions">Получить все вопросы</button>
     <button @click="get_all_categories" class="get__all-categories">Получить все категории</button>
     <button @click="get_all_users" class="get__all-users">Получить всех пользователей</button>

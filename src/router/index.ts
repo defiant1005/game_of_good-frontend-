@@ -1,5 +1,4 @@
-import {createRouter, createWebHashHistory, createWebHistory, RouteRecordRaw} from 'vue-router'
-import LoginPage from '../views/LoginPage.vue'
+import {createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router'
 import LoginLayouts from "@/layouts/LoginLayouts.vue";
 import MainLayouts from "@/layouts/MainLayouts.vue";
 import HomePage from "@/views/HomePage.vue";
@@ -50,8 +49,6 @@ const routes: Array<RouteRecordRaw> = [
 ]
 
 const router = createRouter({
-  // history: createWebHistory(process.env.BASE_URL),
-  // history: createWebHashHistory(process.env.BASE_URL),
   history: createWebHashHistory(),
   routes
 })

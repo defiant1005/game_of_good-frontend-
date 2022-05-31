@@ -26,7 +26,7 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
             baseURL: baseUrl,
             timeout: 1000,
         })
-        if (refreshToken !== null && typeof refreshToken !== 'undefined') {
+        if (refreshToken !== null || typeof refreshToken !== 'undefined') {
             this.status = LoginStatus.IN_PROCCESS
             this.refresh(refreshToken).then(
                 (data) => {

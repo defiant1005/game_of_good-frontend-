@@ -41,8 +41,8 @@ export default defineComponent({
           const tokens = await accountRepository.login(user.user_name, user.user_password)
           networkDriver.signIn(tokens.access, tokens.refresh)
           cookies.set('user_name', user.user_name)
-          router.replace({
-            name: 'main'
+          router.push({
+            path: '/start'
           }).then()
         } catch (e) {
           if (typeof e.response.status !=='undefined' && e.response.status === 401) {

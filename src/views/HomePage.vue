@@ -1,7 +1,7 @@
 <template>
   <div class="homePage__wrapper">
     <div class="homePage__container">
-      <router-view></router-view>
+      <router-view :all_questions="all_questions"></router-view>
     </div>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="login__wrapper">
     <form class="login__form-container">
-      <el-input v-model="user.user_name" type="text" placeholder="Логин"/>
+      <el-input v-model="user.user_name" type="text" placeholder="Логин" autocomplete="off"/>
       <el-input v-model="user.user_password" type="password" autocomplete="off" show-password placeholder="Пароль"/>
       <button @click.prevent="submit_form" class="login__form-submit">Войти</button>
     </form>

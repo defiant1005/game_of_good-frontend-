@@ -9,10 +9,10 @@
         :size="formSize"
     >
       <el-form-item label="Логин" prop="username">
-        <el-input v-model="register_form.username" />
+        <el-input v-model="register_form.username" autocomplete="off"/>
       </el-form-item>
       <el-form-item label="Email" prop="email">
-        <el-input v-model="register_form.email" />
+        <el-input v-model="register_form.email" autocomplete="off" />
       </el-form-item>
       <el-form-item label="Пароль" prop="password">
         <el-input v-model="register_form.password" type="password" autocomplete="off" show-password placeholder="Минимум 8 символов"/>

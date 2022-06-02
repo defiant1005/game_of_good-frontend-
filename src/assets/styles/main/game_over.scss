@@ -1,2 +1,15 @@
-.gameOver__wrapper {}
+.gameOver__wrapper {
+  width: 400px;
+  height: 200px;
+  border-radius: 10px;
+  margin-top: 200px;
+  background: #2a2ab6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 30px;
+  line-height: 35px;
+  text-align: center;
+}
 .gameOver__container {}

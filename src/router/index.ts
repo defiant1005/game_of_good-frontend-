@@ -69,8 +69,12 @@ router.beforeEach((to, from, next) => {
   const accessToken = cookies.get("accessToken");
   if (accessToken === null && to.path !=='' && to.path !=='/' &&  to.path !=='/login' &&  to.path !=='/register') {
     next("");
-  } else if (accessToken && (to.path ==='/' || to.path ==='' || to.path ==='/' || to.path ==='/login' || to.path ==='/register')) {
+  } else if (accessToken && (to.path ==='/'
+      || to.path ==='' || to.path ==='/' || to.path ==='/login' || to.path ==='/register' || (to.path ==='/game' && from.path !== '/start')
+  )) {
     next("main/start");
+  } else if (accessToken && from.path === '/game' && to.path === '/game') {
+    next('main/start');
   } else {
     next();
   }

@@ -4,6 +4,7 @@
   position: relative;
 }
 .homePage__container {
+  position: relative;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -29,4 +30,12 @@
 }
 .homePage__container-title:active {
   color: #ce1212;
+}
+.number_points {
+  font-size: 50px;
+  line-height: 55px;
+  color: #856400;
+  position: absolute;
+  top: 40px;
+  right: 50px;
 }

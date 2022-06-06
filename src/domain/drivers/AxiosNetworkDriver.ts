@@ -7,6 +7,7 @@ import {useCookies} from "vue3-cookies";
 import {ElMessage, ElNotification} from "element-plus";
 import router from "@/router";
 import {useRouter} from "vue-router";
+import jwt_decode from "jwt-decode";
 
 const {cookies} = useCookies();
 
@@ -21,13 +22,33 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
     constructor(baseUrl: string) {
         this.status = LoginStatus.ANONIMOUS;
         const refreshToken = cookies.get('refreshToken')
+        const accessToken = cookies.get('accessToken')
 
         this._axios_instance = axios.create({
             baseURL: baseUrl,
             timeout: 1000,
         })
-        if (refreshToken !== null || typeof refreshToken !== 'undefined') {
-            this.status = LoginStatus.IN_PROCCESS
+        if (accessToken) {
+            const access_decode:any = jwt_decode(accessToken)
+            const exp = access_decode.exp
+            if (exp*1000 < Date.now()) {
+                this.refresh(refreshToken).then(
+                    (data) => {
+                        this.signIn(data.access, data.refresh)
+                        this.status = LoginStatus.AUTHORIZATED
+                    }
+                ).catch(
+                    (e) => {
+                        ElNotification({
+                            title: 'Success',
+                            message: e,
+                            type: 'error'
+                        })
+                        this.status = LoginStatus.ANONIMOUS
+                    }
+                )
+            }
+        } else if (!accessToken && refreshToken) {
             this.refresh(refreshToken).then(
                 (data) => {
                     this.signIn(data.access, data.refresh)
@@ -41,11 +62,10 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
                         type: 'error'
                     })
                     this.status = LoginStatus.ANONIMOUS
-                    cookies.remove('refreshToken')
-                    cookies.remove('accessToken')
                 }
             )
         }
+
     }
     async get(url: string, params: Record<string, unknown>, headers: Record<string, string>): Promise<IResponse> {
         let counter = 0;

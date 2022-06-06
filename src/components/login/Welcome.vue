@@ -1,7 +1,7 @@
 <template>
   <div class="loginLayouts__wrapper">
     <div class="loginLayouts__container">
-      <div class="loginLayouts__title">Вход в Игру Бога</div>
+      <div class="loginLayouts__title">Вход в Игру</div>
       <div class="loginLayouts__btn signIn__btn" @click="sign_in">Войти</div>
       <div class="loginLayouts__btn signOut__btn" @click="sign_out">Зарегистрироваться</div>
     </div>

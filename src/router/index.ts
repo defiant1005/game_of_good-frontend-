@@ -8,6 +8,7 @@ import Register from "@/components/login/Register.vue";
 import Welcome from "@/components/login/Welcome.vue";
 import StartGame from "@/components/main/StartGame.vue";
 import Game from "@/components/main/Game.vue";
+import NotFound from "@/components/NotFound.vue";
 
 const { cookies } = useCookies();
 
@@ -18,7 +19,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Welcome,
     meta: {
       title: 'Добро пожаловать',
-      layout: LoginLayouts
+      layout: LoginLayouts,
+      isLoginPage: true,
     },
   },
   {
@@ -27,7 +29,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Login,
     meta: {
       title: 'Авторизация',
-      layout: LoginLayouts
+      layout: LoginLayouts,
+      isLoginPage: true,
     },
   },
   {
@@ -36,7 +39,8 @@ const routes: Array<RouteRecordRaw> = [
     component: Register,
     meta: {
       title: 'Регистрация',
-      layout: LoginLayouts
+      layout: LoginLayouts,
+      isLoginPage: true,
     },
   },
   {
@@ -57,7 +61,12 @@ const routes: Array<RouteRecordRaw> = [
         component: Game
       },
     ],
-  }
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: NotFound
+  },
 ]
 
 const router = createRouter({
@@ -67,16 +76,16 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const accessToken = cookies.get("accessToken");
-  if (accessToken === null && to.path !=='' && to.path !=='/' &&  to.path !=='/login' &&  to.path !=='/register') {
-    next("");
-  } else if (accessToken && (to.path ==='/'
-      || to.path ==='' || to.path ==='/' || to.path ==='/login' || to.path ==='/register' || (to.path ==='/game' && from.path !== '/start')
-  )) {
-    next("main/start");
-  } else if (accessToken && from.path === '/game' && to.path === '/game') {
-    next('main/start');
+  const refreshToken = cookies.get("refreshToken");
+
+  if (!accessToken && !refreshToken && !to.meta.isLoginPage) {
+    next('/home/')
+  } else if (accessToken && to.meta.isLoginPage) {
+    next('/main/')
+  } else if (to.name === 'NotFound') {
+    next('/main/')
   } else {
-    next();
+    next()
   }
 });
 

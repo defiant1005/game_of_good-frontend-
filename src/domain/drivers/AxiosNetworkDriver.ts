@@ -65,7 +65,6 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
                 }
             )
         }
-
     }
     async get(url: string, params: Record<string, unknown>, headers: Record<string, string>): Promise<IResponse> {
         let counter = 0;

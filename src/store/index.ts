@@ -1,15 +1,15 @@
 import {createStore} from 'vuex'
-import questionStore from '@/store/modules/question.store.ts'
+// import questionStore from '@/store/modules/question.store.ts'
 import {useCookies} from "vue3-cookies";
 
 
 const BASE_URL:any = process.env.VUE_APP_API_BASE_URL
-const { cookies } = useCookies();
+// const { cookies } = useCookies();
 
 
 export default createStore({
     state: {
-        accessToken: cookies.get('accessToken') ? cookies.get('accessToken') : null,
+        // accessToken: cookies.get('accessToken') ? cookies.get('accessToken') : null,
     },
     getters: {
     },
@@ -18,7 +18,7 @@ export default createStore({
     actions: {
     },
     modules: {
-        questionStore,
+        // questionStore,
     }
 })
 export {BASE_URL};

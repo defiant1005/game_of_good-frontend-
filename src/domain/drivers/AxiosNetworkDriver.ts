@@ -4,9 +4,7 @@ import {IResponse} from "./IResponse";
 import {cAxiosResponse} from "./AxiosResponse";
 import {IJWTNetworkDriver, LoginStatus} from "@/domain/drivers/IJWTNetworkDriver";
 import {useCookies} from "vue3-cookies";
-import {ElMessage, ElNotification} from "element-plus";
-import router from "@/router";
-import {useRouter} from "vue-router";
+import {ElNotification} from "element-plus";
 import jwt_decode from "jwt-decode";
 
 const {cookies} = useCookies();
@@ -23,7 +21,6 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
         this.status = LoginStatus.ANONIMOUS;
         const refreshToken = cookies.get('refreshToken')
         const accessToken = cookies.get('accessToken')
-
         this._axios_instance = axios.create({
             baseURL: baseUrl,
             timeout: 1000,
@@ -73,9 +70,9 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
             await sleep(200);
             counter++;
         }
-        if (this.status != LoginStatus.AUTHORIZATED) {
-            throw Error('Authorization Await Timeout')
-        }
+        // if (this.status != LoginStatus.AUTHORIZATED) {
+        //     throw Error('Authorization Await Timeout')
+        // }
         const _response = await this._axios_instance.get(url, {
             params: params,
             headers: headers
@@ -109,6 +106,7 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
                     const obtainsToken = await this.refresh(this._refreshToken);
                     this._accessToken = obtainsToken.access;
                     this._refreshToken = obtainsToken.refresh;
+
                 }
             }
         )
@@ -122,30 +120,6 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
         cookies.set('accessToken', accessToken)
         this._registerJWTRequestInterceptor();
         this._registerJWTResponseInterceptor();
-    }
-    async register(register_data:any) {
-        const router = useRouter();
-
-        const data = {
-            username: register_data.username,
-            password: register_data.password,
-            // email: register_data.email,
-        }
-        try {
-            const response:any = await this._axios_instance.post('auth/users/', data)
-            return response
-        } catch (e) {
-            return e
-            // console.log(e)
-            // const errors:any = Object.values(e.response.data)[0]
-            // errors.forEach((i:any) => {
-            //     ElMessage({
-            //         showClose: true,
-            //         message: `${i}`,
-            //         type: 'error',
-            //     })
-            // })
-        }
     }
     signOut(): void {
         this._accessToken = undefined;
@@ -163,7 +137,22 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
         const data = {
             'refresh': refreshToken
         }
-        const response = await this._axios_instance.post('api/token/refresh/', data)
+        const response = await this._axios_instance.post('/user/accounts/login/token-refresh/', data)
         return response.data
     }
+    async register(register_data:any) {
+        const data = {
+            username: register_data.username,
+            password: register_data.password,
+        }
+        try {
+            const response:any = await this._axios_instance.post('auth/users/', data)
+            return response
+        } catch (e) {
+            return e
+        }
+    }
+
 }
+
+

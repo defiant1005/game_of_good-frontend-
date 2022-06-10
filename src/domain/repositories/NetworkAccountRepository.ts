@@ -31,8 +31,7 @@ export class NetworkAccountRepository implements IAccountRepository {
 
     async get_questions() {
         const url = '/questions/'
-        const response = await this._networkDriver.get(url)
-        return response
+        return await this._networkDriver.get(url)
     }
     async get_categories() {
         const url = '/categories/'

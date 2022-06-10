@@ -14,7 +14,7 @@ const { cookies } = useCookies();
 
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/',
+    path: '/home',
     name: 'home',
     component: Welcome,
     meta: {
@@ -79,11 +79,11 @@ router.beforeEach((to, from, next) => {
   const refreshToken = cookies.get("refreshToken");
 
   if (!accessToken && !refreshToken && !to.meta.isLoginPage) {
-    next('/home/')
+    next('home')
   } else if (accessToken && to.meta.isLoginPage) {
-    next('/main/')
+    next('/main')
   } else if (to.name === 'NotFound') {
-    next('/main/')
+    next('/main')
   } else {
     next()
   }

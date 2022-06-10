@@ -29,7 +29,7 @@ export default defineComponent ({
     const logout = async() => {
       try {
         networkDriver.signOut()
-        router.replace({
+        router.push({
           name: 'login'
         }).then()
       } catch (e) {

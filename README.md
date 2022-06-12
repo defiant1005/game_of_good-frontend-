@@ -1,5 +1,11 @@
 # frontend
 
+## Данные для авторизации
+```
+логин: test_user
+пароль: test_pass
+```
+
 ## Project setup
 ```
 npm install

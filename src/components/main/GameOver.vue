@@ -15,7 +15,9 @@ export default defineComponent ({
   setup() {
     const router = useRouter();
     const goHome = () => {
-      router.go(0)
+      router.push({
+        name: 'main'
+      })
     }
     return {
       goHome

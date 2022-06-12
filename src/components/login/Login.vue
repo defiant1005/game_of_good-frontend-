@@ -45,13 +45,13 @@ export default defineComponent({
             path: '/start'
           })
         } catch (e) {
-          if (typeof e.response.status !=='undefined' && e.response.status === 401) {
-            ElMessage({
-              showClose: true,
-              message: 'Неверный логин или пароль',
-              type: 'error',
-            })
-          } else {
+          // if (typeof e.response.status !=='undefined' && e.response.status === 401) {
+          //   ElMessage({
+          //     showClose: true,
+          //     message: 'Неверный логин или пароль',
+          //     type: 'error',
+          //   })
+          // } else {
             ElMessage({
               showClose: true,
               message: 'Неизвестная ошибка. Обратитесь к администратору.',
@@ -59,7 +59,7 @@ export default defineComponent({
             })
             console.log(e)
           }
-        }
+        // }
       } else {
         ElMessage({
           showClose: true,

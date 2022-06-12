@@ -23,7 +23,7 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
         const accessToken = cookies.get('accessToken')
         this._axios_instance = axios.create({
             baseURL: baseUrl,
-            timeout: 1000,
+            timeout: 4000,
         })
         if (accessToken) {
             const access_decode:any = jwt_decode(accessToken)
@@ -31,11 +31,13 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
             if (exp*1000 < Date.now()) {
                 this.refresh(refreshToken).then(
                     (data) => {
+                        alert(1)
                         this.signIn(data.access, data.refresh)
                         this.status = LoginStatus.AUTHORIZATED
                     }
                 ).catch(
                     (e) => {
+                        alert(2)
                         ElNotification({
                             title: 'Success',
                             message: e,
@@ -44,6 +46,15 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
                         this.status = LoginStatus.ANONIMOUS
                     }
                 )
+            } else if ((exp*1000 >= Date.now()) && refreshToken) {
+                this._accessToken = accessToken;
+                this._refreshToken = refreshToken;
+
+                this._registerJWTRequestInterceptor();
+                this._registerJWTResponseInterceptor();
+                console.log('Токены валидны')
+            } else {
+               this.signOut()
             }
         } else if (!accessToken && refreshToken) {
             this.refresh(refreshToken).then(
@@ -61,6 +72,8 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
                     this.status = LoginStatus.ANONIMOUS
                 }
             )
+        } else {
+            this.signOut()
         }
     }
     async get(url: string, params: Record<string, unknown>, headers: Record<string, string>): Promise<IResponse> {
@@ -70,9 +83,6 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
             await sleep(200);
             counter++;
         }
-        // if (this.status != LoginStatus.AUTHORIZATED) {
-        //     throw Error('Authorization Await Timeout')
-        // }
         const _response = await this._axios_instance.get(url, {
             params: params,
             headers: headers
@@ -87,31 +97,7 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
         const response = new cAxiosResponse(_response)
         return response;
     }
-    _registerJWTRequestInterceptor(): any {
-        this._jwtRequestInterceptorID = this._axios_instance.interceptors.request.use((config) => {
-                if (config.headers == undefined) {
-                    config.headers = {};
-                } else {
-                    config.headers.Authorization = `Bearer ${this._accessToken}`;
-                }
-                return config;
-            }
-        )
-    }
-    _registerJWTResponseInterceptor(): any {
-        this._jwtResponseInterceptorID = this._axios_instance.interceptors.response.use(async (response) => {
-                if (!(response.status == 401 || response.status == 403) || this._refreshToken === undefined) {
-                    return response;
-                } else {
-                    const obtainsToken = await this.refresh(this._refreshToken);
-                    this._accessToken = obtainsToken.access;
-                    this._refreshToken = obtainsToken.refresh;
 
-                }
-            }
-        )
-
-    }
     signIn(accessToken: string, refreshToken: string): void {
         this._accessToken = accessToken;
         this._refreshToken = refreshToken;
@@ -137,7 +123,7 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
         const data = {
             'refresh': refreshToken
         }
-        const response = await this._axios_instance.post('/user/accounts/login/token-refresh/', data)
+        const response = await this._axios_instance.post('/api/token/refresh/', data)
         return response.data
     }
     async register(register_data:any) {
@@ -151,6 +137,31 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
         } catch (e) {
             return e
         }
+    }
+
+    _registerJWTRequestInterceptor(): any {
+        this._jwtRequestInterceptorID = this._axios_instance.interceptors.request.use((config) => {
+                if (config.headers == undefined) {
+                    config.headers = {};
+                } else {
+                    config.headers.Authorization = `Bearer ${this._accessToken}`;
+                }
+                return config;
+            }
+        )
+    }
+    _registerJWTResponseInterceptor(): any {
+        this._jwtResponseInterceptorID = this._axios_instance.interceptors.response.use(async (response) => {
+                if (!(response.status == 401 || response.status == 403) || this._refreshToken === undefined) {
+                    return response;
+                } else {
+                    const obtainsToken = await this.refresh(this._refreshToken);
+                    this._accessToken = obtainsToken.access;
+                    this._refreshToken = obtainsToken.refresh;
+                }
+            }
+        )
+
     }
 
 }

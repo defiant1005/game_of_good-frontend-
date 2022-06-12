@@ -20,7 +20,7 @@ import {computed, defineComponent, onMounted, reactive, Ref, ref} from 'vue';
 import {iQuestion} from "@/domain/interfaces/question_intefaces";
 import {iCategory} from "@/domain/interfaces/category_interfaces";
 import {iUser} from "@/domain/interfaces/users_intefaces";
-import {UseHomepageHooks} from "@/domain/hooks/honepage_hooks";
+import {UseHomepageHooks} from "@/domain/hooks/homepage_hooks";
 import GameOver from "@/components/main/GameOver.vue";
 
 export default defineComponent({

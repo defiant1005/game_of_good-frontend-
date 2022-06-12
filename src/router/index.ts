@@ -9,6 +9,7 @@ import Welcome from "@/components/login/Welcome.vue";
 import StartGame from "@/components/main/StartGame.vue";
 import Game from "@/components/main/Game.vue";
 import NotFound from "@/components/NotFound.vue";
+import GameOver from "@/components/main/GameOver.vue";
 
 const { cookies } = useCookies();
 
@@ -53,12 +54,16 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: '/start',
+        path: '',
         component: StartGame
       },
       {
         path: '/game',
         component: Game
+      },
+      {
+        path: '/game-over',
+        component: GameOver
       },
     ],
   },

@@ -12,7 +12,7 @@
         <el-input v-model="register_form.username" autocomplete="off"/>
       </el-form-item>
       <el-form-item label="Email" prop="email">
-        <el-input v-model="register_form.email" autocomplete="off" />
+        <el-input v-model="register_form.email" autocomplete="off" placeholder="Необязательно"/>
       </el-form-item>
       <el-form-item label="Пароль" prop="password">
         <el-input v-model="register_form.password" type="password" autocomplete="off" show-password placeholder="Минимум 8 символов"/>
@@ -81,18 +81,18 @@ export default defineComponent({
         { required: true, message: 'Пожалуйста, введите логин', trigger: 'blur' },
         { min: 3, message: 'Минимум 3 буквы', trigger: 'blur' },
       ],
-      email: [
-        {
-          required: true,
-          message: 'Введите почту',
-          trigger: 'blur',
-        },
-        {
-          type: 'email',
-          message: 'Введите корректную почту',
-          trigger: 'blur',
-        },
-      ],
+      // email: [
+      //   {
+      //     required: true,
+      //     message: 'Введите почту',
+      //     trigger: 'blur',
+      //   },
+      //   {
+      //     type: 'email',
+      //     message: 'Введите корректную почту',
+      //     trigger: 'blur',
+      //   },
+      // ],
       password: [{ validator: validatePass, trigger: 'blur' }],
       password_again: [{ validator: validatePass2, trigger: 'blur' }],
 

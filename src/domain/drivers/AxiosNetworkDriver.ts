@@ -31,13 +31,11 @@ export class AxiosNetworkDriver implements INetworkDriver, IJWTNetworkDriver {
             if (exp*1000 < Date.now()) {
                 this.refresh(refreshToken).then(
                     (data) => {
-                        alert(1)
                         this.signIn(data.access, data.refresh)
                         this.status = LoginStatus.AUTHORIZATED
                     }
                 ).catch(
                     (e) => {
-                        alert(2)
                         ElNotification({
                             title: 'Success',
                             message: e,

@@ -8,24 +8,26 @@
                    @correct_answer="correct_answer_handler"
                    :random_question="random_question"
                    :count="count"
-                   v-if="all_questions.length !== 0"
       ></router-view>
-      <GameOver v-else></GameOver>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, onMounted, reactive, Ref, ref} from 'vue';
+import {computed, defineComponent, onMounted, Ref, ref} from 'vue';
 import {iQuestion} from "@/domain/interfaces/question_intefaces";
 import {iCategory} from "@/domain/interfaces/category_interfaces";
 import {iUser} from "@/domain/interfaces/users_intefaces";
 import {UseHomepageHooks} from "@/domain/hooks/homepage_hooks";
-import GameOver from "@/components/main/GameOver.vue";
+import router from "@/router";
+import store from "@/store/modules/question.store";
 
 export default defineComponent({
-  components: {GameOver},
   setup() {
+    // const all_questions = computed(() => store.getters.get_question)
+    // const all_categories = computed(() => store.getters.get_question)
+    // const all_users = computed(() => store.getters.get_question)
+
     let all_questions:Ref<Array<iQuestion>> = ref([]);
     let all_categories:Ref<Array<iCategory>> = ref([]);
     let all_users:Ref<Array<iUser>> = ref([]);
@@ -38,8 +40,12 @@ export default defineComponent({
     });
 
     const edit_questions_handler = () => {
-      if (all_questions.value) {
+      if (all_questions.value.length !== 1) {
         all_questions.value = all_questions.value.filter((i:any) => i.id !== random_question.value.id)
+      } else {
+        router.push({
+          path: 'main/game-over'
+        })
       }
     };
 

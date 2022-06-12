@@ -10,13 +10,17 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import {useRouter} from "vue-router";
+import {useStore} from "vuex";
 
 export default defineComponent ({
   setup() {
+    const store = useStore()
+
     const router = useRouter();
-    const goHome = () => {
-      router.push({
-        name: 'main'
+    const goHome = async () => {
+      await store.dispatch('GET_QUESTIONS_FROM_API')
+      await router.push({
+        path: '/main'
       })
     }
     return {
